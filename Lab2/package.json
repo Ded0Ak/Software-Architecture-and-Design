@@ -1,0 +1,16 @@
+{
+  "name": "university-discipline-sim",
+  "version": "1.0.0",
+  "private": true,
+  "type": "commonjs",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/app/main.js",
+    "dev": "ts-node src/app/main.ts"
+  },
+  "devDependencies": {
+    "@types/node": "^20.19.39",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.4.5"
+  }
+}
