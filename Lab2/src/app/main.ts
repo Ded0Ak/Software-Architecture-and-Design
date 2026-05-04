@@ -107,9 +107,7 @@ async function main(): Promise<void> {
   let admissionSub: Subscription | null = null;
   let activitiesSub: Subscription | null = null;
   let teachersSub: Subscription | null = null;
-  let workSub1: Subscription | null = null;
-  let workSub2: Subscription | null = null;
-  let workSub3: Subscription | null = null;
+  let workSubs: Subscription[] = [];
 
   const admissionObserver: Observer<AdmissionChangedEvent> = {
     update: (e) => console.log("[ПОДІЯ admissionChanged]:", e),
@@ -131,6 +129,26 @@ async function main(): Promise<void> {
     }
   }
 
+  function resubscribeWorkObservers(d: Discipline): void {
+    for (const s of workSubs) s.unsubscribe();
+    workSubs = [];
+
+    const lab = getActivity(d, ActivityType.LAB);
+    const cp = getActivity(d, ActivityType.CP);
+
+    if (lab) {
+      for (const t of lab.getTeachers()) {
+        workSubs.push(d.onWorkSubmitted(new TeacherWorkObserver(t, ActivityType.LAB)));
+      }
+    }
+
+    if (cp) {
+      for (const t of cp.getTeachers()) {
+        workSubs.push(d.onWorkSubmitted(new TeacherWorkObserver(t, ActivityType.CP)));
+      }
+    }
+  }
+
   function subscribeDisciplineEvents(d: Discipline): void {
     if (!eventsEnabled) return;
 
@@ -138,19 +156,16 @@ async function main(): Promise<void> {
     activitiesSub = d.onActivitiesChanged(activitiesObserver);
     teachersSub = d.onActivityTeachersChanged(teachersObserver);
 
-    workSub1 = d.onWorkSubmitted(new TeacherWorkObserver(labTeacher1, ActivityType.LAB));
-    workSub2 = d.onWorkSubmitted(new TeacherWorkObserver(labTeacher2, ActivityType.LAB));
-    workSub3 = d.onWorkSubmitted(new TeacherWorkObserver(lecturer, ActivityType.CP));
+    resubscribeWorkObservers(d);
   }
 
   function clearDisciplineEvents(): void {
     admissionSub?.unsubscribe();
     activitiesSub?.unsubscribe();
     teachersSub?.unsubscribe();
-    workSub1?.unsubscribe();
-    workSub2?.unsubscribe();
-    workSub3?.unsubscribe();
-    admissionSub = activitiesSub = teachersSub = workSub1 = workSub2 = workSub3 = null;
+    for (const s of workSubs) s.unsubscribe();
+    workSubs = [];
+    admissionSub = activitiesSub = teachersSub = null;
   }
 
   function reserveAllTeachers(d: Discipline): void {
@@ -323,6 +338,7 @@ async function main(): Promise<void> {
 
             const updated = current.filter((a) => a.type !== ActivityType.CP);
             discipline.setActivities(updated);
+            resubscribeWorkObservers(discipline);
             console.log("CP прибрано.");
           } else {
             const slotKey = buildSlotKey(discipline.type, ActivityType.CP);
@@ -330,6 +346,7 @@ async function main(): Promise<void> {
 
             const updated = [...current, new Activity(ActivityType.CP, [lecturer])];
             discipline.setActivities(updated);
+            resubscribeWorkObservers(discipline);
             console.log("CP додано.");
           }
           break;
@@ -387,6 +404,7 @@ async function main(): Promise<void> {
           }
 
           discipline.changeTeachersForActivity(activityType, teachers);
+          resubscribeWorkObservers(discipline);
           console.log("Викладачів оновлено.");
           break;
         }
