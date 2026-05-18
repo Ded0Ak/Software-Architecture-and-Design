@@ -22,7 +22,7 @@ export class ConsoleApp {
   async run(): Promise<void> {
     this.seed();
 
-    console.log("ДИЗАЙН-СТУДІЯ: КОНСОЛЬНИЙ ЗАСТОСУНОК");
+    console.log("ДИЗАЙН-СТУДІЯ:");
     let exit = false;
 
     while (!exit) {

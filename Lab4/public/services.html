@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8" />
+  <title>Послуги</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 text-gray-800">
+  <div class="max-w-5xl mx-auto p-6">
+    <h1 class="text-2xl font-bold mb-4">Послуги</h1>
+    <a href="index.html" class="text-blue-600 underline">← На головну</a>
+
+    <div id="errorBox" class="hidden mt-4 p-3 bg-red-100 text-red-700 rounded"></div>
+    <div id="successBox" class="hidden mt-2 p-3 bg-green-100 text-green-700 rounded"></div>
+
+    <div class="mt-6">
+      <h2 class="text-xl font-semibold mb-2">Додати / Редагувати послугу</h2>
+      <div class="grid grid-cols-1 md:grid-cols-5 gap-2">
+        <input id="serviceId" class="border p-2" placeholder="ID (для редагування)" type="number" />
+        <input id="name" class="border p-2" placeholder="Назва" />
+        <input id="price" class="border p-2" placeholder="Ціна" type="number" />
+        <select id="type" class="border p-2">
+          <option value="Regular">Звичайна</option>
+          <option value="Turnkey">Під ключ</option>
+        </select>
+        <button id="addBtn" class="bg-blue-600 text-white p-2">Додати</button>
+      </div>
+      <div class="mt-2">
+        <button id="updateBtn" class="bg-yellow-600 text-white p-2">Оновити по ID</button>
+      </div>
+    </div>
+
+    <div class="mt-8">
+      <h2 class="text-xl font-semibold mb-2">Список послуг</h2>
+      <table class="w-full bg-white shadow rounded">
+        <thead>
+          <tr class="bg-gray-100 text-left">
+            <th class="p-2">ID</th>
+            <th class="p-2">Назва</th>
+            <th class="p-2">Ціна</th>
+            <th class="p-2">Тип</th>
+            <th class="p-2">Дії</th>
+          </tr>
+        </thead>
+        <tbody id="servicesTable"></tbody>
+      </table>
+    </div>
+  </div>
+  <script src="js/common.js"></script>
+  <script src="js/services.js"></script>
+</body>
+</html>

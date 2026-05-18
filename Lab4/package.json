@@ -1,0 +1,24 @@
+{
+  "name": "design-studio-console",
+  "version": "1.0.0",
+  "description": "WebAPI + Web UI (multi-layer architecture)",
+  "main": "dist/api/server.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "ts-node src/api/server.ts"
+  },
+  "devDependencies": {
+    "@types/body-parser": "^1.19.5",
+    "@types/express": "^4.17.21",
+    "@types/node": "^20.12.7",
+    "ts-node": "^10.9.2",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^5.4.5"
+  },
+  "dependencies": {
+    "body-parser": "^1.20.2",
+    "express": "^4.19.2",
+    "inversify": "^6.0.2",
+    "reflect-metadata": "^0.2.2"
+  }
+}
